@@ -298,6 +298,6 @@ instead of opening a public issue.
 
 ## License
 
-[MIT](LICENSE) © 2026 Talat
+[MIT](LICENSE) © 2026 Talat Özünal
 
 See [docs/ICONS.md](docs/ICONS.md) for icon generation and asset structure.

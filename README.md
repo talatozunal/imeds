@@ -304,7 +304,7 @@ Güvenlik açıklarını herkese açık issue yerine
 
 ## Lisans
 
-[MIT](LICENSE) © 2026 Talat
+[MIT](LICENSE) © 2026 Talat Özünal
 
 Uygulama ikonlarının üretimi ve dosya yapısı için [docs/ICONS.md](docs/ICONS.md)
 dosyasına bakın.
