@@ -12,7 +12,7 @@ Katkılarınız için teşekkürler. Bu proje iki SwiftUI hedefinden oluşur:
 - Gerçek cihazda test için bir iPhone ve Apple TV önerilir
 
 ```bash
-git clone https://github.com/<kullanici>/imeds.git
+git clone https://github.com/talatozunal/imeds.git
 cd imeds
 open imeds.xcodeproj
 ```

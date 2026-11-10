@@ -125,7 +125,7 @@ temizlenir, `../` gibi girişimler etkisizleştirilir ve aynı adlı dosyalar
 ## Kurulum
 
 ```bash
-git clone https://github.com/<kullanici>/imeds.git
+git clone https://github.com/talatozunal/imeds.git
 cd imeds
 open imeds.xcodeproj
 ```

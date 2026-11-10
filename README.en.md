@@ -123,7 +123,7 @@ and duplicates become `file_1.ext`, `file_2.ext`.
 ## Installation
 
 ```bash
-git clone https://github.com/<user>/imeds.git
+git clone https://github.com/talatozunal/imeds.git
 cd imeds
 open imeds.xcodeproj
 ```
