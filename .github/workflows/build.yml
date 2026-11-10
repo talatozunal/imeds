@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: imeds + imedtv
+    runs-on: macos-15
+
+    steps:
+      - name: Depoyu çek
+        uses: actions/checkout@v4
+
+      - name: Xcode sürümü
+        run: xcodebuild -version
+
+      - name: iOS derlemesi (imeds)
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project imeds.xcodeproj \
+            -scheme imeds \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: tvOS derlemesi (imedtv)
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project imeds.xcodeproj \
+            -scheme imedtv \
+            -sdk appletvsimulator \
+            -destination 'generic/platform=tvOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build

@@ -1,0 +1,38 @@
+name: Özellik isteği
+description: Yeni bir özellik veya iyileştirme önerin
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: target
+    attributes:
+      label: İlgili uygulama
+      options:
+        - imeds (iPhone / iPad)
+        - imedtv (Apple TV)
+        - İkisi de
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Çözmek istediğiniz problem
+      placeholder: "Örn. Birden fazla dosyayı tek seferde göndermek istiyorum."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Önerilen çözüm
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Düşündüğünüz alternatifler
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Kontrol listesi
+      options:
+        - label: README ve yol haritasında bu önerinin olmadığını kontrol ettim.
+          required: true

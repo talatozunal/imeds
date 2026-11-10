@@ -1,0 +1,62 @@
+name: Hata bildirimi
+description: Bir sorunu bildirin
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Teşekkürler! Lütfen aşağıdaki alanları doldurun. Güvenlik açıkları için
+        lütfen SECURITY.md içindeki özel bildirim yolunu kullanın.
+  - type: dropdown
+    id: target
+    attributes:
+      label: Etkilenen uygulama
+      options:
+        - imeds (iPhone / iPad)
+        - imedtv (Apple TV)
+        - İkisi de
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Cihaz ve işletim sistemi
+      placeholder: "Örn. iPhone 15 / iOS 18.2, Apple TV 4K / tvOS 18.2"
+    validations:
+      required: true
+  - type: input
+    id: xcode
+    attributes:
+      label: Xcode sürümü
+      placeholder: "Örn. Xcode 16.2"
+  - type: textarea
+    id: steps
+    attributes:
+      label: Yeniden üretme adımları
+      description: Sorunu en kısa yoldan nasıl tekrar oluşturabiliriz?
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Beklenen davranış
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Gerçekleşen davranış
+      description: Ekranda yazan hata metnini de ekleyin.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Günlük kaydı / ekran görüntüsü
+      description: |
+        Varsa `imeds` / `imedtv` birleşik günlük kaydı
+        (`subsystem == "com.talat.imeds"`) veya ekran görüntüsü ekleyin.

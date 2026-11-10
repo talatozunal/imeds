@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+# Yerel yedekler ve üretilmiş kopyalar
+*.bak
+_icon-backup/
+AppIcon 1.png
+iphone_app_icon_1024.png
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+
+# Geçici dosyalar
+*.swp
+*~
