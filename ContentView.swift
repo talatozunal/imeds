@@ -7,6 +7,8 @@ import QuickLook
 
 struct ContentView: View {
     @EnvironmentObject var networkManager: NetworkManager
+    @EnvironmentObject private var dil: Yerellestirme
+    @State private var isLanguagePresented = false
     @State private var isFilePickerPresented = false
     @State private var isPhotoPickerPresented = false
     @State private var isSendOptionsPresented = false
@@ -24,6 +26,7 @@ struct ContentView: View {
                 peerSection
                 sendSection
                 receivedFilesSection
+                languageSection
             }
             .listStyle(.insetGrouped)
             .navigationTitle("imeds")
@@ -68,17 +71,17 @@ struct ContentView: View {
                 )
             }
             .confirmationDialog(
-                "Ne göndermek istiyorsun?",
+                dil.metin("send.what"),
                 isPresented: $isSendOptionsPresented,
                 titleVisibility: .visible
             ) {
-                Button("Fotoğraf / Video Seç") {
+                Button(dil.metin("send.photoVideo")) {
                     isPhotoPickerPresented = true
                 }
-                Button("Dosya Seç") {
+                Button(dil.metin("send.file")) {
                     isFilePickerPresented = true
                 }
-                Button("İptal", role: .cancel) {}
+                Button(dil.metin("common.cancel"), role: .cancel) {}
             }
             #if os(iOS)
             .quickLookPreview($previewURL)
@@ -87,7 +90,7 @@ struct ContentView: View {
                 get: { networkManager.lastError != nil },
                 set: { if !$0 { networkManager.lastError = nil } }
             )) {
-                Button("Tamam", role: .cancel) {
+                Button(dil.metin("common.ok"), role: .cancel) {
                     networkManager.lastError = nil
                 }
             } message: {
@@ -100,11 +103,11 @@ struct ContentView: View {
 
     @ViewBuilder
     private var peerSection: some View {
-        Section("imeds Ağı") {
+        Section {
             if networkManager.connectedPeers.isEmpty {
                 HStack {
                     ProgressView().padding(.trailing, 5)
-                    Text("Cihaz aranıyor...").foregroundColor(.gray)
+                    Text(dil.metin("peer.searching")).foregroundColor(.gray)
                 }
             } else {
                 ForEach(networkManager.connectedPeers, id: \.self) { peer in
@@ -130,6 +133,30 @@ struct ContentView: View {
                     .buttonStyle(.plain)
                 }
             }
+        } header: {
+            Text(dil.metin("peer.section"))
+        }
+    }
+
+    // MARK: - Dil
+
+    @ViewBuilder
+    private var languageSection: some View {
+        Section {
+            Button {
+                isLanguagePresented = true
+            } label: {
+                HStack {
+                    Label(dil.metin("dil.sec"), systemImage: "globe")
+                        .foregroundStyle(.primary)
+                    Spacer()
+                    Text(dil.seciliDilAdi)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .sheet(isPresented: $isLanguagePresented) {
+                DilSecici()
+            }
         }
     }
 
@@ -142,7 +169,7 @@ struct ContentView: View {
                 Button {
                     isSendOptionsPresented = true
                 } label: {
-                    Label("\(peer.displayName) cihazına gönder", systemImage: "paperplane.fill")
+                    Label(dil.metin("send.toDevice", peer.displayName), systemImage: "paperplane.fill")
                         .font(.headline)
                         .padding()
                         .frame(maxWidth: .infinity)
@@ -158,9 +185,9 @@ struct ContentView: View {
             } else {
                 if #available(iOS 17.0, *) {
                     ContentUnavailableView(
-                        "Cihaz Bekleniyor",
+                        dil.metin("peer.waiting.title"),
                         systemImage: "bolt.hybrid.page.fill",
-                        description: Text("Diğer Apple cihazınızda imeds uygulamasını açın.")
+                        description: Text(dil.metin("peer.waiting.desc"))
                     )
                     .listRowBackground(Color.clear)
                 } else {
@@ -172,11 +199,11 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         ProgressView()
-                        Text("Medya hazırlanıyor...")
+                        Text(dil.metin("media.preparing"))
                             .font(.caption)
                             .bold()
                     }
-                    Text("Büyük videolar iCloud'dan indiriliyor olabilir; bu adım birkaç dakika sürebilir.")
+                    Text(dil.metin("media.icloud"))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
@@ -187,11 +214,11 @@ struct ContentView: View {
             }
 
             if networkManager.isSending {
-                transferCard(title: "Gönderiliyor...")
+                transferCard(title: dil.metin("transfer.sending"))
             }
 
             if networkManager.isReceiving {
-                transferCard(title: "Alınıyor...")
+                transferCard(title: dil.metin("transfer.receiving"))
             }
         }
     }
@@ -242,7 +269,7 @@ struct ContentView: View {
         Button(role: .destructive) {
             networkManager.cancelTransfer()
         } label: {
-            Label("Vazgeç", systemImage: "xmark.circle.fill")
+            Label(dil.metin("transfer.cancel"), systemImage: "xmark.circle.fill")
                 .font(.subheadline.bold())
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 8)
@@ -261,9 +288,9 @@ struct ContentView: View {
             if networkManager.receivedFiles.isEmpty {
                 if #available(iOS 17.0, *) {
                     ContentUnavailableView(
-                        "Henüz Dosya Yok",
+                        dil.metin("files.empty.title"),
                         systemImage: "tray",
-                        description: Text("Gelen dosyalar burada listelenir.")
+                        description: Text(dil.metin("files.empty.desc"))
                     )
                     .listRowBackground(Color.clear)
                 } else {
@@ -284,7 +311,7 @@ struct ContentView: View {
                                 HStack {
                                     Text(file.formattedSize)
                                     if file.isMedia {
-                                        Text("• Galeriye Kaydedildi")
+                                        Text(dil.metin("files.savedToPhotos"))
                                             .foregroundColor(.green)
                                             .bold()
                                     }
@@ -302,7 +329,7 @@ struct ContentView: View {
                         Button(role: .destructive) {
                             networkManager.deleteFile(file)
                         } label: {
-                            Label("Sil", systemImage: "trash")
+                            Label(dil.metin("common.delete"), systemImage: "trash")
                         }
                     }
                 }
@@ -312,7 +339,7 @@ struct ContentView: View {
                 }
             }
         } header: {
-            Text("Alınan Dosyalar")
+            Text(dil.metin("files.received"))
         }
     }
 }

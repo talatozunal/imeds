@@ -13,6 +13,8 @@ import UIKit
 let transferLog = Logger(subsystem: "com.talat.imeds", category: "transfer")
 
 final class NetworkManager: NSObject, ObservableObject {
+    private var dil: Yerellestirme { .paylasilan }
+
     private let serviceType = "imeds-transfer"
 
     private let myPeerId: MCPeerID
@@ -102,16 +104,16 @@ final class NetworkManager: NSObject, ObservableObject {
 
     func sendFile(url: URL, to peer: MCPeerID? = nil) {
         guard let target = peer ?? selectedPeer ?? connectedPeers.first else {
-            publishError("Gönderilecek bir cihaz seçili değil.")
+            publishError(dil.metin("error.noDevice"))
             return
         }
 
         guard FileManager.default.fileExists(atPath: url.path) else {
-            publishError("Gönderilecek dosya bulunamadı. Lütfen dosyayı yeniden seçin.")
+            publishError(dil.metin("error.fileMissing"))
             return
         }
 
-        let name = url.lastPathComponent.isEmpty ? "Dosya" : url.lastPathComponent
+        let name = url.lastPathComponent.isEmpty ? dil.metin("file.default") : url.lastPathComponent
         let fileSize = (try? FileManager.default.attributesOfItem(atPath: url.path))?[.size] as? Int64 ?? 0
 
         // Gönderim sırasında eski hata mesajı ekranda kalmasın.
@@ -137,7 +139,7 @@ final class NetworkManager: NSObject, ObservableObject {
                 if let error {
                     transferLog.error("Gönderim hatası: \(error.localizedDescription, privacy: .public)")
                     if !self.userCancelledTransfer {
-                        self.lastError = "Gönderim hatası: \(error.localizedDescription)"
+                        self.lastError = self.dil.metin("error.send", error.localizedDescription)
                     }
                 } else {
                     self.lastError = nil
@@ -245,16 +247,19 @@ final class NetworkManager: NSObject, ObservableObject {
     /// "12,4 MB / 48,1 MB" biçiminde boyut metni.
     var transferSizeText: String {
         guard totalTransferBytes > 0 else { return "" }
-        let done = ByteCountFormatter.string(fromByteCount: transferredBytes, countStyle: .file)
-        let total = ByteCountFormatter.string(fromByteCount: totalTransferBytes, countStyle: .file)
-        return "\(done) / \(total)"
+        return "\(boyutMetni(transferredBytes)) / \(boyutMetni(totalTransferBytes))"
+    }
+
+    /// Bayt sayısını seçili uygulama diline göre biçimlendirir.
+    private func boyutMetni(_ bayt: Int64) -> String {
+        dil.baytMetni(bayt)
     }
 
     /// "8,2 MB/sn" biçiminde hız metni.
     var transferSpeedText: String {
         guard transferSpeed >= 1024 else { return "" }
-        let value = ByteCountFormatter.string(fromByteCount: Int64(transferSpeed), countStyle: .file)
-        return "\(value)/sn"
+        let value = boyutMetni(Int64(transferSpeed))
+        return dil.metin("transfer.speed", value)
     }
 
     /// Devam eden gönderimi/alımı `Progress.cancel()` ile iptal eder.
@@ -487,7 +492,7 @@ final class NetworkManager: NSObject, ObservableObject {
         PHPhotoLibrary.requestAuthorization(for: .addOnly) { [weak self] status in
             guard status == .authorized || status == .limited else {
                 DispatchQueue.main.async {
-                    self?.lastError = "Galeriye kaydetmek için izin verilmedi."
+                    self?.lastError = Yerellestirme.paylasilan.metin("error.photoPermission")
                 }
                 return
             }
@@ -501,7 +506,7 @@ final class NetworkManager: NSObject, ObservableObject {
             }) { success, error in
                 guard !success, let error else { return }
                 DispatchQueue.main.async {
-                    self?.lastError = "Galeriye kaydetme hatası: \(error.localizedDescription)"
+                    self?.lastError = Yerellestirme.paylasilan.metin("error.photoSave", error.localizedDescription)
                 }
             }
         }
@@ -517,9 +522,9 @@ final class NetworkManager: NSObject, ObservableObject {
         let text = error.localizedDescription.lowercased()
         if text.contains("cancel") || text.contains("no longer connected")
             || text.contains("not connected") || text.contains("bağlantı") {
-            return "Aktarım iptal edildi."
+            return Yerellestirme.paylasilan.metin("error.cancelled")
         }
-        return "Dosya alınamadı: \(error.localizedDescription)"
+        return Yerellestirme.paylasilan.metin("error.receive", error.localizedDescription)
     }
 }
 
@@ -584,7 +589,7 @@ extension NetworkManager: MCSessionDelegate {
         guard let tempURL = localURL else {
             DispatchQueue.main.async {
                 self.isReceiving = false
-                self.lastError = "Dosya alınamadı: geçici dosya adresi yok."
+                self.lastError = Yerellestirme.paylasilan.metin("error.tempFile")
                 self.updateTransferActivity()
             }
             return
@@ -619,7 +624,7 @@ extension NetworkManager: MCSessionDelegate {
             }
         } catch {
             transferLog.error("Dosya kaydedilemedi: \(error.localizedDescription, privacy: .public)")
-            publishError("Dosya kaydedilemedi: \(error.localizedDescription)")
+            publishError(dil.metin("error.save", error.localizedDescription))
             DispatchQueue.main.async {
                 self.isReceiving = false
                 self.updateTransferActivity()
@@ -634,9 +639,9 @@ extension NetworkManager: MCSessionDelegate {
         var errorDescription: String? {
             switch self {
             case let .directoryUnavailable(url, error):
-                return "Alınan dosyalar klasörü oluşturulamadı (\(url.lastPathComponent)): \(error.localizedDescription)"
+                return Yerellestirme.paylasilan.metin("error.receiveFolder", url.lastPathComponent, error.localizedDescription)
             case .temporaryFileMissing:
-                return "Aktarım yarıda kesildi: geçici dosya bulunamadı. Lütfen tekrar deneyin."
+                return Yerellestirme.paylasilan.metin("error.interrupted")
             }
         }
     }

@@ -57,7 +57,7 @@ struct UniversalFilePicker: UIViewControllerRepresentable {
                 do {
                     try fileManager.createDirectory(at: folder, withIntermediateDirectories: true)
 
-                    let name = url.lastPathComponent.isEmpty ? "Dosya" : url.lastPathComponent
+                    let name = url.lastPathComponent.isEmpty ? Yerellestirme.paylasilan.metin("file.default") : url.lastPathComponent
                     let destination = folder.appendingPathComponent(name)
                     try fileManager.copyItem(at: url, to: destination)
 
@@ -66,7 +66,7 @@ struct UniversalFilePicker: UIViewControllerRepresentable {
                     }
                 } catch {
                     DispatchQueue.main.async {
-                        parent.onError("Dosya kopyalanamadı: \(error.localizedDescription)")
+                        parent.onError(Yerellestirme.paylasilan.metin("error.fileCopy", error.localizedDescription))
                     }
                 }
             }
@@ -129,9 +129,9 @@ struct PhotoPicker: UIViewControllerRepresentable {
 
             provider.loadFileRepresentation(forTypeIdentifier: typeIdentifier) { url, error in
                 guard let url, error == nil else {
-                    let message = error?.localizedDescription ?? "Bilinmeyen hata"
+                    let message = error?.localizedDescription ?? Yerellestirme.paylasilan.metin("error.unknown")
                     DispatchQueue.main.async {
-                        parent.onError("Fotoğraf/video okunamadı: \(message)")
+                        parent.onError(Yerellestirme.paylasilan.metin("error.mediaRead", message))
                     }
                     return
                 }
@@ -145,9 +145,9 @@ struct PhotoPicker: UIViewControllerRepresentable {
                 do {
                     try fileManager.createDirectory(at: folder, withIntermediateDirectories: true)
 
-                    let providerName = provider.suggestedName ?? "Medya"
+                    let providerName = provider.suggestedName ?? Yerellestirme.paylasilan.metin("media.default")
                     let rawBase = URL(fileURLWithPath: providerName).deletingPathExtension().lastPathComponent
-                    let baseName = rawBase.isEmpty || rawBase == "." || rawBase == ".." ? "Medya" : rawBase
+                    let baseName = rawBase.isEmpty || rawBase == "." || rawBase == ".." ? Yerellestirme.paylasilan.metin("media.default") : rawBase
 
                     let ext = url.pathExtension.isEmpty
                         ? (UTType(typeIdentifier)?.preferredFilenameExtension ?? "dat")
@@ -161,7 +161,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
                     }
                 } catch {
                     DispatchQueue.main.async {
-                        parent.onError("Fotoğraf/video kopyalanamadı: \(error.localizedDescription)")
+                        parent.onError(Yerellestirme.paylasilan.metin("error.mediaCopy", error.localizedDescription))
                     }
                 }
             }

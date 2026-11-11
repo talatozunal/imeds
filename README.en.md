@@ -61,6 +61,8 @@ the main screen with the last media pinned at the bottom, ready for the next fil
 - **Preparation state** — "Preparing media..." while iCloud downloads or converts.
 - **No sleep during transfer** — the iPhone screen stays awake so Wi-Fi does not slow down.
 - **Zero dependencies** — Apple frameworks only.
+- **Five languages** — Turkish, English, German, French and Italian, switchable
+  in-app without restarting.
 
 ## Screenshots
 
@@ -160,11 +162,11 @@ xcodebuild -project imeds.xcodeproj -scheme imedtv \
 
 1. Open **imedtv** on the Apple TV.
 2. Open **imeds** on the iPhone.
-3. Your Apple TV appears under **imeds Ağı**.
-4. Tap **Fotoğraf / Video Seç** or **Dosya Seç**.
-5. If preparation is needed, "Medya hazırlanıyor..." is shown, then the
-   transfer starts.
-6. The transfer card shows percentage, size and speed. Tap **Vazgeç** to cancel.
+3. Your Apple TV appears under **imeds Network**.
+4. Tap **Choose Photo / Video** or **Choose File**.
+5. If preparation is needed, "Preparing media..." is shown, then the transfer
+   starts.
+6. The transfer card shows percentage, size and speed. Tap **Cancel** to cancel.
 
 ### Apple TV
 
@@ -174,10 +176,24 @@ xcodebuild -project imeds.xcodeproj -scheme imedtv \
   and played inline.
 - **Audio** files get a music card with a duration bar and **Play / Pause**.
 - While a player is open, the remote's **Back** button does not quit the app;
-  the media collapses into the **Son Medya** bar at the bottom.
-- **Göster** expands it again. On the main screen, Back behaves normally and
+  the media collapses into the **Latest Media** bar at the bottom.
+- **Show** expands it again. On the main screen, Back behaves normally and
   exits the app.
 - When a new file arrives, the large view opens automatically.
+
+## Language support
+
+The interface ships in five languages: **Turkish, English, German, French and
+Italian**. It follows the device language by default.
+
+- **iPhone / iPad:** tap the **Language** row at the bottom of the list.
+- **Apple TV:** select the **Language** button next to the title.
+
+The choice is stored in `UserDefaults` and applied to every screen without
+restarting the app. Translations live in `Localizable.strings` inside the
+`tr.lproj`, `en.lproj`, `de.lproj`, `fr.lproj` and `it.lproj` folders. To add a
+language, create a new `.lproj` folder with the same keys, add its code to
+`UygulamaDili`, and list it in `desteklenenDiller` in `Dil.swift`.
 
 ## Supported file types
 
@@ -219,6 +235,8 @@ targets; update both apps together if you change it.
 ├── ContentView.swift           # iOS UI
 ├── AppleTVView.swift           # tvOS UI + video/audio players
 ├── FilePicker.swift            # PHPicker and Files bridge
+├── Dil.swift                   # language manager and DilSecici
+├── tr|en|de|fr|it.lproj/       # Localizable.strings + InfoPlist.strings
 ├── Info.plist                  # iOS permissions
 ├── Info-tvOS.plist             # tvOS permissions
 ├── imeds/Assets.xcassets/      # app icons for iOS and tvOS

@@ -5,6 +5,8 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) temellidir.
 
 ## [Yayınlanmadı]
 
+- Türkçe, İngilizce, Almanca, Fransızca ve İtalyanca arayüz; uygulama içinden
+  yeniden başlatmadan dil değiştirme (`Dil.swift`, `.lproj` çevirileri).
 - Share Extension ile Files uygulamasından doğrudan gönderim.
 - Birden fazla dosyayı kuyruğa alıp sırayla gönderme.
 

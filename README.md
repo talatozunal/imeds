@@ -63,6 +63,8 @@ bittiğinde Apple TV ana ekranında kalır ve yeni dosya almaya hazır olur.
   "Medya hazırlanıyor..." gösterilir.
 - **Uyku engeli** — aktarım sırasında iPhone ekranı kapanmaz, Wi-Fi yavaşlamaz.
 - **Sıfır bağımlılık** — yalnızca Apple çatısı; harici paket yok.
+- **Beş dil** — Türkçe, İngilizce, Almanca, Fransızca ve İtalyanca; uygulama
+  içinden yeniden başlatmadan değiştirilir.
 
 ## Ekran görüntüleri
 
@@ -183,6 +185,21 @@ xcodebuild -project imeds.xcodeproj -scheme imedtv \
   şekilde uygulamadan çıkar.
 - Yeni bir dosya geldiğinde büyük görünüm kendiliğinden geri açılır.
 
+## Dil desteği
+
+Uygulama arayüzü beş dilde gelir: **Türkçe, İngilizce, Almanca, Fransızca,
+İtalyanca**. Varsayılan olarak cihazın dilini kullanır.
+
+- **iPhone / iPad:** listenin altındaki **Dil** satırına dokunun.
+- **Apple TV:** başlığın yanındaki **Dil** düğmesini seçin.
+
+Seçim `UserDefaults` içinde saklanır ve uygulama yeniden başlatılmadan tüm
+ekranlara uygulanır. Çeviriler `tr.lproj`, `en.lproj`, `de.lproj`, `fr.lproj`
+ve `it.lproj` klasörlerindeki `Localizable.strings` dosyalarındadır. Yeni bir
+dil eklemek için aynı anahtarlarla yeni bir `.lproj` klasörü oluşturmak,
+`UygulamaDili` listesine kodunu eklemek ve `Dil.swift` içindeki
+`desteklenenDiller` dizisine yazmak yeterlidir.
+
 ## Desteklenen dosya türleri
 
 | Tür | Uzantılar | Apple TV davranışı |
@@ -223,6 +240,8 @@ olmalıdır; değiştirirseniz iki hedefi birlikte güncelleyin.
 ├── ContentView.swift           # iOS arayüzü
 ├── AppleTVView.swift           # tvOS arayüzü + video/ses oynatıcıları
 ├── FilePicker.swift            # PHPicker ve Files köprüsü
+├── Dil.swift                   # dil yöneticisi ve DilSecici
+├── tr|en|de|fr|it.lproj/       # Localizable.strings + InfoPlist.strings
 ├── Info.plist                  # iOS izinleri
 ├── Info-tvOS.plist             # tvOS izinleri
 ├── imeds/Assets.xcassets/      # iOS ve tvOS uygulama ikonları

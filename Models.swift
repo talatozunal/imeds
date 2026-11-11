@@ -9,7 +9,7 @@ struct SharedFile: Identifiable, Hashable {
     let receivedAt: Date
 
     var formattedSize: String {
-        ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
+        Yerellestirme.paylasilan.baytMetni(size)
     }
 
     /// Uzantıyı boşluklardan arındırıp küçük harfe çevirir.

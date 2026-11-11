@@ -7,11 +7,13 @@ import Combine
 
 struct AppleTVView: View {
     @EnvironmentObject var networkManager: NetworkManager
+    @EnvironmentObject private var dil: Yerellestirme
 
     /// Son medya büyük oynatıcıda mı gösteriliyor? Kumandanın "Geri"
     /// tuşuna basınca uygulamadan çıkmak yerine oynatıcı kapatılır ve son
     /// medya ekranın altındaki şeritte kalmaya devam eder.
     @State private var isMediaExpanded = true
+    @State private var isLanguagePresented = false
 
     private var latestFile: SharedFile? { networkManager.receivedFiles.first }
 
@@ -35,6 +37,9 @@ struct AppleTVView: View {
                     isMediaExpanded = true
                 }
             }
+        }
+        .sheet(isPresented: $isLanguagePresented) {
+            DilSecici()
         }
     }
 
@@ -66,15 +71,26 @@ struct AppleTVView: View {
 
     private var statusColumn: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text("imedtv Alıcı")
-                .font(.largeTitle)
-                .foregroundColor(.orange)
-                .bold()
+            HStack(alignment: .firstTextBaseline) {
+                Text(dil.metin("tv.receiver"))
+                    .font(.largeTitle)
+                    .foregroundColor(.orange)
+                    .bold()
+
+                Spacer()
+
+                Button {
+                    isLanguagePresented = true
+                } label: {
+                    Label(dil.metin("dil.sec"), systemImage: "globe")
+                }
+                .buttonStyle(.card)
+            }
 
             if networkManager.connectedPeers.isEmpty {
                 HStack {
                     ProgressView().padding(.trailing, 10)
-                    Text("Yayın için kaynak cihaz bekleniyor...")
+                    Text(dil.metin("tv.waitingSource"))
                         .font(.headline)
                         .foregroundColor(.gray)
                 }
@@ -82,7 +98,7 @@ struct AppleTVView: View {
                 ForEach(networkManager.connectedPeers, id: \.self) { peer in
                     HStack {
                         Image(systemName: "airplayvideo").foregroundColor(.orange)
-                        Text("\(peer.displayName) Cihazından Alınmaya Hazır")
+                        Text(dil.metin("tv.readyFrom", peer.displayName))
                             .font(.headline)
                     }
                 }
@@ -91,7 +107,7 @@ struct AppleTVView: View {
             if networkManager.isReceiving {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
-                        Text("Dosya alınıyor...").font(.headline)
+                        Text(dil.metin("tv.receiving")).font(.headline)
                         Spacer()
                         if !networkManager.transferPercentText.isEmpty {
                             Text(networkManager.transferPercentText)
@@ -113,7 +129,7 @@ struct AppleTVView: View {
                     Button(role: .destructive) {
                         networkManager.cancelTransfer()
                     } label: {
-                        Label("Vazgeç", systemImage: "xmark.circle.fill")
+                        Label(dil.metin("transfer.cancel"), systemImage: "xmark.circle.fill")
                     }
                     .buttonStyle(.card)
                 }
@@ -127,7 +143,7 @@ struct AppleTVView: View {
 
             Spacer()
 
-            Text("iPhone, iPad veya Mac'inizden bu TV'ye fotoğraf ya da video gönderin.")
+            Text(dil.metin("tv.hint"))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -141,13 +157,13 @@ struct AppleTVView: View {
             if isMediaExpanded, let lastFile = latestFile {
                 VStack(spacing: 20) {
                     HStack {
-                        Text("Gelen Son Medya")
+                        Text(dil.metin("tv.latestMedia"))
                             .font(.headline)
                         Spacer()
                         Button {
                             collapseMedia()
                         } label: {
-                            Label("Ana Ekran", systemImage: "chevron.down.circle")
+                            Label(dil.metin("tv.home"), systemImage: "chevron.down.circle")
                         }
                         .buttonStyle(.card)
                     }
@@ -156,9 +172,9 @@ struct AppleTVView: View {
                 }
             } else if latestFile == nil {
                 ContentUnavailableView(
-                    "Akışa Hazır",
+                    dil.metin("tv.ready.title"),
                     systemImage: "airplayvideo",
-                    description: Text("Mobil cihazınızdan atılan medyalar burada tam ekran görüntülenecektir.")
+                    description: Text(dil.metin("tv.ready.desc"))
                 )
             }
         }
@@ -198,7 +214,7 @@ struct AppleTVView: View {
             lastMediaThumbnail(file)
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("Son Medya")
+                Text(dil.metin("tv.lastMedia"))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Text(file.name)
@@ -213,7 +229,7 @@ struct AppleTVView: View {
                     isMediaExpanded = true
                 }
             } label: {
-                Label("Göster", systemImage: "rectangle.expand.vertical")
+                Label(dil.metin("tv.show"), systemImage: "rectangle.expand.vertical")
             }
             .buttonStyle(.card)
         }
@@ -253,6 +269,7 @@ struct AppleTVView: View {
 /// nedeni ekranda gösterilir. Oynatıcı tam ekran yerine yerleşik gösterilir;
 /// böylece fullScreenCover'ın boş açılması gibi sorunlar yaşanmaz.
 private struct VideoPlaybackPane: View {
+    @EnvironmentObject private var dil: Yerellestirme
     let file: SharedFile
     var onClose: () -> Void = {}
 
@@ -270,7 +287,7 @@ private struct VideoPlaybackPane: View {
             } else if isLoading {
                 VStack(spacing: 16) {
                     ProgressView()
-                    Text("Video hazırlanıyor...")
+                    Text(dil.metin("video.preparing"))
                         .font(.headline)
                         .foregroundColor(.secondary)
                 }
@@ -284,7 +301,7 @@ private struct VideoPlaybackPane: View {
                         Text(file.name)
                             .font(.headline)
                             .lineLimit(1)
-                        Text("Videoyu Oynatmak İçin Tıklayın")
+                        Text(dil.metin("video.tapToPlay"))
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
@@ -335,7 +352,7 @@ private struct VideoPlaybackPane: View {
 
                 guard isPlayable, !videoTracks.isEmpty else {
                     isLoading = false
-                    errorMessage = "Bu video oynatılamıyor. Dosya bozuk olabilir ya da desteklenmeyen bir codec kullanıyor olabilir."
+                    errorMessage = dil.metin("video.error")
                     return
                 }
 
@@ -346,7 +363,7 @@ private struct VideoPlaybackPane: View {
             } catch {
                 transferLog.error("Video açılamadı: \(error.localizedDescription, privacy: .public)")
                 isLoading = false
-                errorMessage = "Video açılamadı: \(error.localizedDescription)"
+                errorMessage = dil.metin("video.openError", error.localizedDescription)
             }
         }
     }
@@ -358,6 +375,7 @@ private struct VideoPlaybackPane: View {
 /// benzeri bir kart, çalma/duraklatma düğmesi ve süre çubuğu gösterilir.
 /// `mp3`, `wav`, `m4a`, `m4r` gibi yaygın ses formatları desteklenir.
 private struct AudioPlaybackPane: View {
+    @EnvironmentObject private var dil: Yerellestirme
     let file: SharedFile
     var onClose: () -> Void = {}
 
@@ -400,7 +418,7 @@ private struct AudioPlaybackPane: View {
             } else if isLoading {
                 HStack(spacing: 10) {
                     ProgressView()
-                    Text("Müzik hazırlanıyor...")
+                    Text(dil.metin("audio.preparing"))
                         .foregroundColor(.secondary)
                 }
             } else if player != nil {
@@ -417,7 +435,7 @@ private struct AudioPlaybackPane: View {
                     .foregroundColor(.secondary)
 
                     Button(action: togglePlayback) {
-                        Label(isPlaying ? "Duraklat" : "Oynat",
+                        Label(isPlaying ? dil.metin("audio.pause") : dil.metin("audio.play"),
                               systemImage: isPlaying ? "pause.circle.fill" : "play.circle.fill")
                             .font(.headline)
                     }
@@ -430,7 +448,7 @@ private struct AudioPlaybackPane: View {
                         Image(systemName: "play.circle.fill")
                             .font(.system(size: 70))
                             .foregroundColor(.orange)
-                        Text("Müziği Çalmak İçin Tıklayın")
+                        Text(dil.metin("audio.tapToPlay"))
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
@@ -485,7 +503,7 @@ private struct AudioPlaybackPane: View {
 
                 guard isPlayable, !audioTracks.isEmpty else {
                     isLoading = false
-                    errorMessage = "Bu ses dosyası oynatılamıyor. Dosya bozuk olabilir ya da desteklenmeyen bir codec kullanıyor olabilir."
+                    errorMessage = dil.metin("audio.error")
                     return
                 }
 
@@ -500,7 +518,7 @@ private struct AudioPlaybackPane: View {
             } catch {
                 transferLog.error("Ses dosyası açılamadı: \(error.localizedDescription, privacy: .public)")
                 isLoading = false
-                errorMessage = "Ses dosyası açılamadı: \(error.localizedDescription)"
+                errorMessage = dil.metin("audio.openError", error.localizedDescription)
             }
         }
     }

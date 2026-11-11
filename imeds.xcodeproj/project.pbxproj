@@ -19,6 +19,12 @@
 		EB021B1830A22BF800578117 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB021B0F30A22BF800578117 /* ContentView.swift */; };
 		EB021B1930A22BF800578117 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB021B1230A22BF800578117 /* Models.swift */; };
 		EB021B1A30A22BF800578117 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = EB021B1430A22BF800578117 /* README.txt */; };
+		AA0000000000000000000002 /* Dil.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000001 /* Dil.swift */; };
+		AA0000000000000000000003 /* Dil.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000001 /* Dil.swift */; };
+		AA0000000000000000000016 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000010 /* Localizable.strings */; };
+		AA0000000000000000000017 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000010 /* Localizable.strings */; };
+		AA0000000000000000000026 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000020 /* InfoPlist.strings */; };
+		AA0000000000000000000027 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000020 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +41,17 @@
 		EB021B1330A22BF800578117 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		EB021B1430A22BF800578117 /* README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		EB021B1B30A22BFA00578117 /* imeds-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "imeds-Bridging-Header.h"; sourceTree = "<group>"; };
+		AA0000000000000000000001 /* Dil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dil.swift; sourceTree = "<group>"; };
+		AA0000000000000000000011 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AA0000000000000000000012 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AA0000000000000000000013 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AA0000000000000000000014 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AA0000000000000000000015 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AA0000000000000000000021 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AA0000000000000000000022 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AA0000000000000000000023 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AA0000000000000000000024 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AA0000000000000000000025 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +84,9 @@
 				EB021B1330A22BF800578117 /* NetworkManager.swift */,
 				EB021B1430A22BF800578117 /* README.txt */,
 				EB021B1B30A22BFA00578117 /* imeds-Bridging-Header.h */,
+				AA0000000000000000000001 /* Dil.swift */,
+				AA0000000000000000000010 /* Localizable.strings */,
+				AA0000000000000000000020 /* InfoPlist.strings */,
 				1A5E0D000000000000000001 /* AppleTVView.swift */,
 				1A5E0D000000000000000002 /* Info.plist */,
 				1A5E0D000000000000000003 /* Info-tvOS.plist */,
@@ -147,6 +167,10 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				tr,
+				de,
+				fr,
+				it,
 				Base,
 			);
 			mainGroup = EB021AF830A22BB200578117;
@@ -168,6 +192,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A5E0D000000000000000016 /* imeds/Assets.xcassets in Resources */,
+				AA0000000000000000000017 /* Localizable.strings in Resources */,
+				AA0000000000000000000027 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +203,8 @@
 			files = (
 				1A5E0D000000000000000015 /* imeds/Assets.xcassets in Resources */,
 				EB021B1A30A22BF800578117 /* README.txt in Resources */,
+				AA0000000000000000000016 /* Localizable.strings in Resources */,
+				AA0000000000000000000026 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,6 +219,7 @@
 				1A5E0D000000000000000013 /* NetworkManager.swift in Sources */,
 				1A5E0D000000000000000012 /* Models.swift in Sources */,
 				1A5E0D000000000000000011 /* AppleTVView.swift in Sources */,
+				AA0000000000000000000003 /* Dil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,10 +232,38 @@
 				EB021B1730A22BF800578117 /* ImedsApp.swift in Sources */,
 				EB021B1830A22BF800578117 /* ContentView.swift in Sources */,
 				EB021B1930A22BF800578117 /* Models.swift in Sources */,
+				AA0000000000000000000002 /* Dil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		AA0000000000000000000010 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AA0000000000000000000011 /* tr */,
+				AA0000000000000000000012 /* en */,
+				AA0000000000000000000013 /* de */,
+				AA0000000000000000000014 /* fr */,
+				AA0000000000000000000015 /* it */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		AA0000000000000000000020 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AA0000000000000000000021 /* tr */,
+				AA0000000000000000000022 /* en */,
+				AA0000000000000000000023 /* de */,
+				AA0000000000000000000024 /* fr */,
+				AA0000000000000000000025 /* it */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1A5E0D000000000000000042 /* Debug */ = {

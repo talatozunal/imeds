@@ -1,0 +1,3 @@
+// imeds — en
+"NSLocalNetworkUsageDescription" = "Uses your local network to find nearby Apple devices and transfer files.";
+"NSPhotoLibraryAddUsageDescription" = "Asks for permission to save received photos and videos to your photo library.";
